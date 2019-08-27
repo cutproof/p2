@@ -22,7 +22,7 @@ public class P2RestController
     @GetMapping("/hello")
     public Collection<String> sayHello()
     {
-    	logger.debug("sayHello: Started.");
+    	logger.trace("sayHello: started.");
     	UKVisaMessage person = null;
     	UKVisaService service = new UKVisaService();
     	List<UKVisaMessage> persons = service.getAllEntries();
