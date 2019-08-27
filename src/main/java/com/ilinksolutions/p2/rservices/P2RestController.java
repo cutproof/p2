@@ -24,14 +24,13 @@ public class P2RestController
     public Collection<String> sayHello()
     {
     	logger.info("sayHello: started.");
-    	UKVisaMessage person = null;
     	UKVisaService service = new UKVisaService();
     	UKVisaMessage entry = new UKVisaMessage();
     	entry.setContactNo("202-277-0788");
     	entry.setEmail("harjeet.parmar@ilinksolutions.com");
     	entry.setFirstName("Harjeet");
     	entry.setLastName("Parmar");
-    	entry.setId(new Random().nextLong());
+    	entry.setId(12);
     	service.addEntry(entry);
     	/*
     	List<UKVisaMessage> persons = service.getAllEntries();
