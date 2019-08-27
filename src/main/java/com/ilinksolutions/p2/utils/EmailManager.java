@@ -76,7 +76,7 @@ public class EmailManager
 		helper.setText("stub", false);
 		helper.addAttachment("message.eft", dataSource);
 		javaMailSender.send(message);
-		logger.info("EmailManager: sendMimeMessageWithAttachments: Sent Email.");
+		logger.info("EmailManager: sendMimeMessageWithAttachments: Sent Email!");
 		logger.info("EmailManager: sendMimeMessageWithAttachments: End.");
 	}
 
