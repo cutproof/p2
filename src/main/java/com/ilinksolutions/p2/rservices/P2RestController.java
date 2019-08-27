@@ -32,6 +32,7 @@ public class P2RestController
     	entry.setLastName("Parmar");
     	entry.setId(12);
     	service.addEntry(entry);
+    	logger.info("sayHello: " + entry.toString());
     	/*
     	List<UKVisaMessage> persons = service.getAllEntries();
     	for(int i = 0; i < persons.size(); i++)

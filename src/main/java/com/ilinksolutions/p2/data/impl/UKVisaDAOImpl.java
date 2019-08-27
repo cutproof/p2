@@ -6,6 +6,10 @@ import java.util.Random;
 import java.util.ArrayList;
 
 import javax.sql.DataSource;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -13,6 +17,7 @@ import javax.naming.NameNotFoundException;
 
 import com.ilinksolutions.p2.data.UKVisaDAO;
 import com.ilinksolutions.p2.domains.UKVisaMessage;
+import com.ilinksolutions.p2.rservices.P2RestController;
 
 /**
  *  TODO: proper exception handling
@@ -21,6 +26,7 @@ import com.ilinksolutions.p2.domains.UKVisaMessage;
 
 public class UKVisaDAOImpl implements UKVisaDAO
 {
+	Logger logger = LoggerFactory.getLogger(UKVisaDAOImpl.class);
 	private final DataSource dataSource;
 
 	public UKVisaDAOImpl()
@@ -60,10 +66,12 @@ public class UKVisaDAOImpl implements UKVisaDAO
 	@Override
 	public void save(UKVisaMessage entry)
 	{
+		logger.info("UKVisaDAOImpl: save: started.");
 		Connection connection = null;
 		PreparedStatement statement = null;
 		try
 		{
+			logger.info("UKVisaDAOImpl: save: " + entry.toString());
 			connection = getConnection();
 			connection.setAutoCommit(true);
 			//	statement = connection.prepareStatement("INSERT INTO visadata (id, summary, description) VALUES (?, ?, ?)");
@@ -94,6 +102,7 @@ public class UKVisaDAOImpl implements UKVisaDAO
 				throw new RuntimeException("UKVisaDAOImpl: save: Could not communicate with DB.");
 			}
 		}
+		logger.info("UKVisaDAOImpl: save: ended.");
 	}
 
 	@Override
