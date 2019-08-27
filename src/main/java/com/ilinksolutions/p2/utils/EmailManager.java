@@ -58,7 +58,7 @@ public class EmailManager
 	    javaMailSender.setHost("smtp.gmail.com");
 	    javaMailSender.setPort(587);
 	     
-	    javaMailSender.setUsername("sungsam752729@gmail.comm");
+	    javaMailSender.setUsername("sungsam752729@gmail.com");
 	    javaMailSender.setPassword("Idcams0!");
 	     
 	    Properties props = javaMailSender.getJavaMailProperties();
@@ -71,8 +71,8 @@ public class EmailManager
 		MimeMessageHelper helper = new MimeMessageHelper(message, true);
 		helper.setSubject("Test");
 		helper.setFrom("sungsam752729@gmail.com");
-		helper.setTo("sungsam752729@gmail.com");
-		helper.setReplyTo("sungsam752729@gmail.com");
+		helper.setTo("sungsam852729@gmail.com");
+		helper.setReplyTo("sungsam852729@gmail.com");
 		helper.setText("stub", false);
 		helper.addAttachment("message.eft", dataSource);
 		javaMailSender.send(message);
