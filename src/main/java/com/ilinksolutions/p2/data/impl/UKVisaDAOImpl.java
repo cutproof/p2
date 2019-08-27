@@ -75,7 +75,7 @@ public class UKVisaDAOImpl implements UKVisaDAO
 			connection = getConnection();
 			connection.setAutoCommit(true);
 			//	statement = connection.prepareStatement("INSERT INTO visadata (id, summary, description) VALUES (?, ?, ?)");
-			statement = connection.prepareStatement("INSERT INTO visadata(person_id, first_name, last_name, contact_no, email) "
+			statement = connection.prepareStatement("INSERT INTO public.visadata(person_id, first_name, last_name, contact_no, email) "
 					+ "VALUES (?, ?, ?, ?, ?)");
 			statement.setInt(1, (int) entry.getId());
 			statement.setString(2, entry.getFirstName());
