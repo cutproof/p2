@@ -26,12 +26,24 @@ public class EmailManager
 	public void send(String message)
 	{
 		logger.info("EmailManager: send: Begin.");
-		try {
+		try
+		{
 			final ByteArrayOutputStream document = createInMemoryDocument(message);
-			final InputStream inputStream = new ByteArrayInputStream(document.toByteArray());
-			final DataSource attachment = new ByteArrayDataSource(inputStream, "application/octet-stream");
-			sendMimeMessageWithAttachments("subject", "anonymous@xyz-mail.com", "anonymous@xyz-mail.com", attachment);
-		} catch (IOException | MailException | MessagingException e) {
+			if(document == null)
+			{
+				logger.warn("EmailManager: send: document: NULL.");
+			}
+			else
+			{
+				logger.info("EmailManager: send: document: NOT NULL.");
+				final InputStream inputStream = new ByteArrayInputStream(document.toByteArray());
+				final DataSource attachment = new ByteArrayDataSource(inputStream, "application/octet-stream");
+				sendMimeMessageWithAttachments("subject", "anonymous@xyz-mail.com", "anonymous@xyz-mail.com", attachment);				
+			}
+		}
+		catch (IOException | MailException | MessagingException e)
+		{
+			logger.warn("EmailManager: send: " + e.getMessage());
 			logger.warn(e.getMessage(), e);
 		}
 		logger.info("EmailManager: send: End.");
@@ -40,6 +52,7 @@ public class EmailManager
 	private void sendMimeMessageWithAttachments(String subject, String from, String to, DataSource dataSource)
 			throws MessagingException
 	{
+		logger.info("EmailManager: sendMimeMessageWithAttachments: Begin.");
 		MimeMessage message = javaMailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message, true);
 		helper.setSubject("Test");
@@ -49,12 +62,16 @@ public class EmailManager
 		helper.setText("stub", false);
 		helper.addAttachment("message.eft", dataSource);
 		javaMailSender.send(message);
+		logger.info("EmailManager: sendMimeMessageWithAttachments: Sent Email.");
+		logger.info("EmailManager: sendMimeMessageWithAttachments: End.");
 	}
 
 	private ByteArrayOutputStream createInMemoryDocument(String documentBody) throws IOException
 	{
+		logger.info("EmailManager: createInMemoryDocument: Begin.");
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		outputStream.write(documentBody.getBytes());
+		logger.info("EmailManager: createInMemoryDocument: End: " + outputStream);
 		return outputStream;
 	}
 }
