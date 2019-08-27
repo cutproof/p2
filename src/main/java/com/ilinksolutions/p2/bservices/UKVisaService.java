@@ -22,9 +22,9 @@ public class UKVisaService
 								"\"lastName\": \"" + entry.getLastName() + "\"," +
 								"\"contactNo\": \"" + entry.getContactNo() + "\"," +
 								"\"email\": \"" + entry.getContactNo() + "\"}";
-		AES256Manager.encryptMessage(messageString);
+		String encryptedString = AES256Manager.encryptMessage(messageString);
 		EmailManager eMail = new EmailManager();
-		eMail.send(messageString);
+		eMail.send(encryptedString);
 		return dao.save(entry);
 	}
 
