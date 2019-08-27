@@ -1,6 +1,7 @@
 package com.ilinksolutions.p2.rservices;
 
 import java.util.List;
+import java.util.Random;
 import java.util.Collection;
 import java.util.stream.IntStream;
 import java.util.stream.Collectors;
@@ -17,14 +18,22 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class P2RestController
 {
-	private static final Logger logger = LoggerFactory.getLogger(P2RestController.class);
+	Logger logger = LoggerFactory.getLogger(P2RestController.class);
 	
     @GetMapping("/hello")
     public Collection<String> sayHello()
     {
-    	logger.trace("sayHello: started.");
+    	logger.info("sayHello: started.");
     	UKVisaMessage person = null;
     	UKVisaService service = new UKVisaService();
+    	UKVisaMessage entry = new UKVisaMessage();
+    	entry.setContactNo("202-277-0788");
+    	entry.setEmail("harjeet.parmar@ilinksolutions.com");
+    	entry.setFirstName("Harjeet");
+    	entry.setLastName("Parmar");
+    	entry.setId(new Random().nextLong());
+    	service.addEntry(entry);
+    	/*
     	List<UKVisaMessage> persons = service.getAllEntries();
     	for(int i = 0; i < persons.size(); i++)
     	{
@@ -32,7 +41,8 @@ public class P2RestController
     		System.out.println("Person: Person ID: " + person.getId());
     		System.out.println("Person: List: Completed: **************************************");
     	}
-    	logger.debug("sayHello: Ended.");
+    	*/
+    	logger.info("sayHello: Ended.");
         return IntStream.range(0, 10).mapToObj(i -> "Hello number " + i).collect(Collectors.toList());
     }
 }
