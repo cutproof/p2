@@ -12,7 +12,13 @@ import org.slf4j.LoggerFactory;
 import com.ilinksolutions.p2.domains.UKVisaMessage;
 import com.ilinksolutions.p2.bservices.UKVisaService;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -45,5 +51,18 @@ public class P2RestController
     	*/
     	logger.info("sayHello: Ended.");
         return IntStream.range(0, 10).mapToObj(i -> "Hello number " + i).collect(Collectors.toList());
+    }
+    
+    @RequestMapping(method = RequestMethod.POST, value="/message")
+    @ResponseBody
+    public UKVisaMessage registerMessage(@RequestBody UKVisaMessage message)
+    {
+    	logger.info("sayHello: registerMessage: Begin.");
+    	logger.info("sayHello: registerMessage: Transform.");
+    	UKVisaMessage returnValue = new UKVisaMessage();
+    	returnValue.setId(100);
+    	returnValue.setFirstName("Harjeet");
+    	returnValue.setLastName("Parmar");
+    	return returnValue;
     }
 }
