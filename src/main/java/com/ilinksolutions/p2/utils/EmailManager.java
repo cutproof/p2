@@ -12,6 +12,7 @@ import javax.mail.util.ByteArrayDataSource;
 
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
 import org.slf4j.Logger;
@@ -53,6 +54,7 @@ public class EmailManager
 			throws MessagingException
 	{
 		logger.info("EmailManager: sendMimeMessageWithAttachments: Begin.");
+		javaMailSender = new JavaMailSenderImpl(); 
 		MimeMessage message = javaMailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message, true);
 		helper.setSubject("Test");
