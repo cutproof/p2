@@ -27,6 +27,7 @@ import com.ilinksolutions.p2.rservices.P2RestController;
 public class UKVisaDAOImpl implements UKVisaDAO
 {
 	Logger logger = LoggerFactory.getLogger(UKVisaDAOImpl.class);
+	
 	private final DataSource dataSource;
 
 	public UKVisaDAOImpl()
@@ -64,25 +65,28 @@ public class UKVisaDAOImpl implements UKVisaDAO
 	}
 
 	@Override
-	public void save(UKVisaMessage entry)
+	public int save(UKVisaMessage entry)
 	{
 		logger.info("UKVisaDAOImpl: save: Begin.");
 		Connection connection = null;
 		PreparedStatement statement = null;
+		int returnValue = 0;
 		try
 		{
 			logger.info("UKVisaDAOImpl: save: " + entry.toString());
 			connection = getConnection();
 			connection.setAutoCommit(true);
 			//	statement = connection.prepareStatement("INSERT INTO visadata (id, summary, description) VALUES (?, ?, ?)");
-			statement = connection.prepareStatement("INSERT INTO public.visadata(person_id, first_name, last_name, contact_no, email) "
+			statement = connection.prepareStatement("INSERT INTO public.visadata(person_id, first_name, last_name, contact_no, email) RETURNING person_id"
 					+ "VALUES (?, ?, ?, ?, ?)");
 			statement.setInt(1, (int) entry.getId());
 			statement.setString(2, entry.getFirstName());
 			statement.setString(3, entry.getLastName());
 			statement.setString(4, entry.getContactNo());
-			statement.setString(5, entry.getEmail());
-			statement.executeUpdate();
+			statement.setString(5, entry.getEmail());			
+			ResultSet rs = statement.executeQuery();
+			rs.next();
+			returnValue = rs.getInt(1);
 		}
 		catch (SQLException e)
 		{
@@ -103,6 +107,7 @@ public class UKVisaDAOImpl implements UKVisaDAO
 			}
 		}
 		logger.info("UKVisaDAOImpl: save: End.");
+		return returnValue;
 	}
 
 	@Override
@@ -161,5 +166,48 @@ public class UKVisaDAOImpl implements UKVisaDAO
 	private long getNextId()
 	{
 		return new Random().nextLong();
+	}
+
+	@Override
+	public UKVisaMessage getEntry(int id)
+	{
+		ResultSet rset = null;
+		Statement statement = null;
+		Connection connection = null;
+		UKVisaMessage returnValue= null;
+		try
+		{
+			connection = getConnection();
+			PreparedStatement ps = connection.prepareStatement("SELECT person_id, first_name, last_name, contact_no, email FROM visadata where person_id = ?");
+		    ps.setInt(1, id);
+		    ResultSet rs = ps.executeQuery();
+		    returnValue = new UKVisaMessage();
+			while (rset.next())
+			{
+			    returnValue.setId(rs.getInt(1));
+			    returnValue.setFirstName(rs.getString(2));
+			    returnValue.setLastName(rs.getString(3));
+			    returnValue.setContactNo(rs.getString(4));
+			    returnValue.setEmail(rs.getString(5));
+			}
+		}
+		catch (SQLException e)
+		{
+			throw new RuntimeException(e);
+		}
+		finally
+		{
+			try
+			{
+				rset.close();
+				statement.close();
+				connection.close();
+			}
+			catch(Exception e)
+			{
+				throw new RuntimeException("UKVisaDAOImpl: getEntry: Could not communicate with DB.");
+			}
+		}
+		return returnValue;
 	}
 }

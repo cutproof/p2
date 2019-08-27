@@ -2,6 +2,7 @@ package com.ilinksolutions.p2.rservices;
 
 import java.util.List;
 import java.util.Random;
+import java.net.URI;
 import java.util.Collection;
 import java.util.stream.IntStream;
 import java.util.stream.Collectors;
@@ -14,12 +15,14 @@ import com.ilinksolutions.p2.bservices.UKVisaService;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 public class P2RestController
@@ -37,7 +40,7 @@ public class P2RestController
     	entry.setFirstName("Harjeet");
     	entry.setLastName("Parmar");
     	entry.setId(12);
-    	service.addEntry(entry);
+    	int returnValue = service.addEntry(entry);
     	logger.info("sayHello: " + entry.toString());
     	/*
     	 * 
@@ -53,17 +56,48 @@ public class P2RestController
         return IntStream.range(0, 10).mapToObj(i -> "Hello number " + i).collect(Collectors.toList());
     }
     
-    @RequestMapping(method = RequestMethod.POST, value="/message")
-    @ResponseBody
-    public UKVisaMessage registerMessage(@RequestBody UKVisaMessage message)
+    @GetMapping("/getmsg/{id}")
+    public ResponseEntity<UKVisaMessage> readEntry(@PathVariable String id)
     {
-    	logger.info("sayHello: registerMessage: Begin.");
-    	logger.info("sayHello: registerMessage: Transform: " + message.toString());
+    	logger.info("registerMessage: readEntry: Begin.");
+    	logger.info("registerMessage: readEntry: Path Variable: " + id);
+        UKVisaService service = new UKVisaService();
+        UKVisaMessage returnValue = service.getEntry(new Integer(id).intValue());
+        if (returnValue == null)
+        {
+        	logger.info("registerMessage: readEntry: returnValue: NULL");
+            return ResponseEntity.notFound().build();
+        }
+        else
+        {
+            logger.info("registerMessage: readEntry: returnValue: " + returnValue.toString());
+            return ResponseEntity.ok(returnValue);
+        }
+    }
+    
+    /*
+    @RequestMapping(method = RequestMethod.POST, value="/savemsg")
+    @ResponseBody*/
+    @PostMapping("/savemsg")
+    public ResponseEntity<UKVisaMessage> registerMessage(@RequestBody UKVisaMessage message)
+    {
+    	logger.info("registerMessage: registerMessage: Begin.");
+    	logger.info("registerMessage: registerMessage: Transform: " + message.toString());
+    	UKVisaService service = new UKVisaService();
+    	
+    	int id = service.addEntry(message);
     	UKVisaMessage returnValue = new UKVisaMessage();
-    	returnValue.setId(100);
-    	returnValue.setFirstName("Harjeet");
-    	returnValue.setLastName("Parmar");
-    	logger.info("sayHello: registerMessage: End.");
-    	return returnValue;
+    	returnValue.setId(id);
+    	if (id == 0)
+    	{
+    		logger.info("registerMessage: registerMessage: id: NULL.");
+            return ResponseEntity.notFound().build();
+        }
+    	else
+    	{
+    		logger.info("registerMessage: registerMessage: id: End.");
+            URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(returnValue.getId()).toUri();
+            return ResponseEntity.created(uri).body(returnValue);
+        }
     }
 }

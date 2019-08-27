@@ -13,13 +13,18 @@ public class UKVisaService
 {
 	private UKVisaDAO dao = new UKVisaDAOImpl();
 
-	public void addEntry(UKVisaMessage entry)
+	public int addEntry(UKVisaMessage entry)
 	{
-		dao.save(entry);
+		return dao.save(entry);
 	}
 
 	public List<UKVisaMessage> getAllEntries()
 	{
 		return dao.list();
+	}
+	
+	public UKVisaMessage getEntry(int id)
+	{
+		return dao.getEntry(id);
 	}
 }

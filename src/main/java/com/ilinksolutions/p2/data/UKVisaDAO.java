@@ -8,6 +8,7 @@ import com.ilinksolutions.p2.domains.UKVisaMessage;
  */
 public interface UKVisaDAO
 {
-    void save(UKVisaMessage entry);
+    int save(UKVisaMessage entry);
     List<UKVisaMessage> list();
+    UKVisaMessage getEntry(int id);
 }
