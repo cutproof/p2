@@ -2,11 +2,14 @@ package com.ilinksolutions.p2.utils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Properties;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
 import javax.activation.DataSource;
 import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
 import javax.mail.util.ByteArrayDataSource;
 
@@ -21,16 +24,13 @@ import org.slf4j.LoggerFactory;
 public class EmailManager
 {
 	Logger logger = LoggerFactory.getLogger(EmailManager.class);
-
-	private JavaMailSender javaMailSender;
-
+	
 	public void send(String message)
 	{
 		logger.info("EmailManager: send: Begin.");
-		try
-		{
+		try {
 			final ByteArrayOutputStream document = createInMemoryDocument(message);
-			if(document == null)
+			if (document == null)
 			{
 				logger.warn("EmailManager: send: document: NULL.");
 			}
@@ -39,7 +39,7 @@ public class EmailManager
 				logger.info("EmailManager: send: document: NOT NULL.");
 				final InputStream inputStream = new ByteArrayInputStream(document.toByteArray());
 				final DataSource attachment = new ByteArrayDataSource(inputStream, "application/octet-stream");
-				sendMimeMessageWithAttachments("subject", "anonymous@xyz-mail.com", "anonymous@xyz-mail.com", attachment);				
+				sendMimeMessageWithAttachments("subject", "anonymous@xyz-mail.com", "anonymous@xyz-mail.com", attachment);
 			}
 		}
 		catch (IOException | MailException | MessagingException e)
@@ -50,17 +50,29 @@ public class EmailManager
 		logger.info("EmailManager: send: End.");
 	}
 
-	private void sendMimeMessageWithAttachments(String subject, String from, String to, DataSource dataSource)
-			throws MessagingException
+	private void sendMimeMessageWithAttachments(String subject, String from, String to, DataSource dataSource) throws MessagingException
 	{
 		logger.info("EmailManager: sendMimeMessageWithAttachments: Begin.");
-		javaMailSender = new JavaMailSenderImpl(); 
+
+		JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
+	    javaMailSender.setHost("smtp.gmail.com");
+	    javaMailSender.setPort(587);
+	     
+	    javaMailSender.setUsername("sungsam752729@gmail.comm");
+	    javaMailSender.setPassword("Idcams0!");
+	     
+	    Properties props = javaMailSender.getJavaMailProperties();
+	    props.put("mail.transport.protocol", "smtp");
+	    props.put("mail.smtp.auth", "true");
+	    props.put("mail.smtp.starttls.enable", "true");
+	    props.put("mail.debug", "true");
+
 		MimeMessage message = javaMailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message, true);
 		helper.setSubject("Test");
-		helper.setFrom("samjsem@yahoo.com");
+		helper.setFrom("sungsam752729@gmail.com");
 		helper.setTo("sungsam752729@gmail.com");
-		helper.setReplyTo("samjsem@yahoo.com");
+		helper.setReplyTo("sungsam752729@gmail.com");
 		helper.setText("stub", false);
 		helper.addAttachment("message.eft", dataSource);
 		javaMailSender.send(message);
@@ -68,8 +80,7 @@ public class EmailManager
 		logger.info("EmailManager: sendMimeMessageWithAttachments: End.");
 	}
 
-	private ByteArrayOutputStream createInMemoryDocument(String documentBody) throws IOException
-	{
+	private ByteArrayOutputStream createInMemoryDocument(String documentBody) throws IOException {
 		logger.info("EmailManager: createInMemoryDocument: Begin.");
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		outputStream.write(documentBody.getBytes());
