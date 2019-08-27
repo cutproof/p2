@@ -11,8 +11,6 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.naming.NameNotFoundException;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 import com.ilinksolutions.p2.data.UKVisaDAO;
 import com.ilinksolutions.p2.domains.UKVisaMessage;
 
@@ -80,6 +78,8 @@ public class UKVisaDAOImpl implements UKVisaDAO
 		}
 		catch (SQLException e)
 		{
+			System.out.println("list: SQLException: e: " + e.getMessage());
+			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
 		finally
