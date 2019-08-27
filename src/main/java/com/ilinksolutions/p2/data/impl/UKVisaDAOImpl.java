@@ -2,7 +2,6 @@ package com.ilinksolutions.p2.data.impl;
 
 import java.sql.*;
 import java.util.List;
-import java.util.Random;
 import java.util.ArrayList;
 
 import javax.sql.DataSource;
@@ -17,12 +16,6 @@ import javax.naming.NameNotFoundException;
 
 import com.ilinksolutions.p2.data.UKVisaDAO;
 import com.ilinksolutions.p2.domains.UKVisaMessage;
-import com.ilinksolutions.p2.rservices.P2RestController;
-
-/**
- *  TODO: proper exception handling
- *  TODO: initialize schema whenever necessary (what if db is not persistent and is restarted while app is running)
- */
 
 public class UKVisaDAOImpl implements UKVisaDAO
 {
@@ -205,6 +198,51 @@ public class UKVisaDAOImpl implements UKVisaDAO
 			}
 		}
 		logger.info("UKVisaDAOImpl: getEntry: End: " + returnValue.toString());
+		return returnValue;
+	}
+
+	@Override
+	public UKVisaMessage updateEntry(int id, UKVisaMessage message)
+	{
+		logger.info("UKVisaDAOImpl: updateEntry: Begin: " + id);
+		ResultSet rs = null;
+		PreparedStatement ps = null;
+		Connection connection = null;
+		UKVisaMessage returnValue= null;
+		try
+		{
+			connection = getConnection();
+			ps = connection.prepareStatement("SELECT person_id, first_name, last_name, contact_no, email FROM visadata where person_id = ?");
+		    ps.setInt(1, id);
+		    rs = ps.executeQuery();
+		    returnValue = new UKVisaMessage();
+			while (rs.next())
+			{
+			    returnValue.setId(rs.getInt(1));
+			    returnValue.setFirstName(rs.getString(2));
+			    returnValue.setLastName(rs.getString(3));
+			    returnValue.setContactNo(rs.getString(4));
+			    returnValue.setEmail(rs.getString(5));
+			}
+		}
+		catch (SQLException e)
+		{
+			throw new RuntimeException(e);
+		}
+		finally
+		{
+			try
+			{
+				rs.close();
+				ps.close();
+				connection.close();
+			}
+			catch(Exception e)
+			{
+				throw new RuntimeException("UKVisaDAOImpl: updateEntry: Could not communicate with DB.");
+			}
+		}
+		logger.info("UKVisaDAOImpl: updateEntry: End: " + returnValue.toString());
 		return returnValue;
 	}
 }

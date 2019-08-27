@@ -11,4 +11,5 @@ public interface UKVisaDAO
     int save(UKVisaMessage entry);
     List<UKVisaMessage> list();
     UKVisaMessage getEntry(int id);
+    UKVisaMessage updateEntry(int id, UKVisaMessage message);
 }
