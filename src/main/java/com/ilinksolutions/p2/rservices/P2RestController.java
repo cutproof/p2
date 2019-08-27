@@ -14,8 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class P2RestController
 { 
-    //	@GetMapping("/hello")
-    @GetMapping("/getJSON")
+    @GetMapping("/hello")
     public Collection<String> sayHello()
     {
     	UKVisaMessage person = null;
