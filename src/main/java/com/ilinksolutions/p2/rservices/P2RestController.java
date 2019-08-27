@@ -25,6 +25,7 @@ public class P2RestController
     	{
     		person = persons.get(i);
     		System.out.println("Person: Person ID: " + person.getId());
+    		System.out.println("Person: List: Completed: **************************************");
     	}
         return IntStream.range(0, 10).mapToObj(i -> "Hello number " + i).collect(Collectors.toList());
     }
