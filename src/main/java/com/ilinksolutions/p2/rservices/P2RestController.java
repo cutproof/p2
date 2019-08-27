@@ -58,11 +58,12 @@ public class P2RestController
     public UKVisaMessage registerMessage(@RequestBody UKVisaMessage message)
     {
     	logger.info("sayHello: registerMessage: Begin.");
-    	logger.info("sayHello: registerMessage: Transform.");
+    	logger.info("sayHello: registerMessage: Transform: " + message.toString());
     	UKVisaMessage returnValue = new UKVisaMessage();
     	returnValue.setId(100);
     	returnValue.setFirstName("Harjeet");
     	returnValue.setLastName("Parmar");
+    	logger.info("sayHello: registerMessage: End.");
     	return returnValue;
     }
 }
