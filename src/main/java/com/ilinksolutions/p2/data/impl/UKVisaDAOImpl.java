@@ -120,7 +120,7 @@ public class UKVisaDAOImpl implements UKVisaDAO
 			list = new ArrayList<UKVisaMessage>();
 			while (rset.next())
 			{
-				int id= rset.getInt(1);
+				int id = rset.getInt(1);
 				String firstName = rset.getString(2);
 				String lastName = rset.getString(3);
 				String contactNo = rset.getString(4);
