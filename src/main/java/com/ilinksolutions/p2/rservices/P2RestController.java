@@ -59,18 +59,18 @@ public class P2RestController
     @GetMapping("/getmsg/{id}")
     public ResponseEntity<UKVisaMessage> readEntry(@PathVariable String id)
     {
-    	logger.info("registerMessage: readEntry: Begin.");
-    	logger.info("registerMessage: readEntry: Path Variable: " + id);
+    	logger.info("P2RestController: readEntry: Begin.");
+    	logger.info("P2RestController: readEntry: Path Variable: " + id);
         UKVisaService service = new UKVisaService();
         UKVisaMessage returnValue = service.getEntry(new Integer(id).intValue());
         if (returnValue == null)
         {
-        	logger.info("registerMessage: readEntry: returnValue: NULL");
+        	logger.info("P2RestController: readEntry: returnValue: NULL");
             return ResponseEntity.notFound().build();
         }
         else
         {
-            logger.info("registerMessage: readEntry: returnValue: " + returnValue.toString());
+            logger.info("P2RestController: readEntry: returnValue: " + returnValue.toString());
             return ResponseEntity.ok(returnValue);
         }
     }

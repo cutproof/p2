@@ -163,26 +163,22 @@ public class UKVisaDAOImpl implements UKVisaDAO
 		return dataSource;
 	}
 
-	private long getNextId()
-	{
-		return new Random().nextLong();
-	}
-
 	@Override
 	public UKVisaMessage getEntry(int id)
 	{
-		ResultSet rset = null;
-		Statement statement = null;
+		logger.info("UKVisaDAOImpl: getEntry: Begin: " + id);
+		ResultSet rs = null;
+		PreparedStatement ps = null;
 		Connection connection = null;
 		UKVisaMessage returnValue= null;
 		try
 		{
 			connection = getConnection();
-			PreparedStatement ps = connection.prepareStatement("SELECT person_id, first_name, last_name, contact_no, email FROM visadata where person_id = ?");
+			ps = connection.prepareStatement("SELECT person_id, first_name, last_name, contact_no, email FROM visadata where person_id = ?");
 		    ps.setInt(1, id);
-		    ResultSet rs = ps.executeQuery();
+		    rs = ps.executeQuery();
 		    returnValue = new UKVisaMessage();
-			while (rset.next())
+			while (rs.next())
 			{
 			    returnValue.setId(rs.getInt(1));
 			    returnValue.setFirstName(rs.getString(2));
@@ -199,8 +195,8 @@ public class UKVisaDAOImpl implements UKVisaDAO
 		{
 			try
 			{
-				rset.close();
-				statement.close();
+				rs.close();
+				ps.close();
 				connection.close();
 			}
 			catch(Exception e)
@@ -208,6 +204,7 @@ public class UKVisaDAOImpl implements UKVisaDAO
 				throw new RuntimeException("UKVisaDAOImpl: getEntry: Could not communicate with DB.");
 			}
 		}
+		logger.info("UKVisaDAOImpl: getEntry: End: " + returnValue.toString());
 		return returnValue;
 	}
 }
