@@ -88,7 +88,7 @@ public class UKVisaDAOImpl implements UKVisaDAO
 		catch (SQLException e)
 		{
 			e.printStackTrace();
-			logger.info("list: SQLException: e: " + e.getMessage());
+			logger.info("UKVisaDAOImpl: save: SQLException: e: " + e.getMessage());
 			throw new RuntimeException(e);
 		}
 		finally
@@ -132,6 +132,8 @@ public class UKVisaDAOImpl implements UKVisaDAO
 		}
 		catch (SQLException e)
 		{
+			e.printStackTrace();
+			logger.info("UKVisaDAOImpl: list: SQLException: e: " + e.getMessage());
 			throw new RuntimeException(e);
 		}
 		finally
@@ -177,6 +179,8 @@ public class UKVisaDAOImpl implements UKVisaDAO
 		}
 		catch (SQLException e)
 		{
+			e.printStackTrace();
+			logger.info("UKVisaDAOImpl: getEntry: SQLException: e: " + e.getMessage());
 			throw new RuntimeException(e);
 		}
 		finally
@@ -221,6 +225,8 @@ public class UKVisaDAOImpl implements UKVisaDAO
 		}
 		catch (SQLException e)
 		{
+			e.printStackTrace();
+			logger.info("UKVisaDAOImpl: updateEntry: SQLException: e: " + e.getMessage());
 			throw new RuntimeException(e);
 		}
 		finally

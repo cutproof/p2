@@ -27,7 +27,7 @@ public class UKVisaService
 	
 	public UKVisaMessage addEntry(UKVisaMessage message)
 	{
-		String text = "Dear applicant, \n\n Your application has been updated based on your a request filed on your behalf.";
+		String text = "Dear applicant, \n\n Your application has been submitted based on your a request filed on your behalf.";
 		String subject = "Re: UK VISA Application: Submission Added.";
 
 		UKVisaMessage returnValue = dao.save(message);
