@@ -8,44 +8,62 @@ import java.io.Serializable;
 public class UKVisaMessage
 {
     private Serializable id;
-    private String summary;
-    private String description;
+    private String firstName;
+    private String lastName;
+    private String contactNo;
+    private String email;
 
-    public UKVisaMessage() {
+    public UKVisaMessage()
+    {
     }
 
-    public UKVisaMessage(String summary, String description) {
-        this(null, summary, description);
-    }
+    public UKVisaMessage(Serializable id, String firstName, String lastName, String contactNo, String email)
+    {
+		super();
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.contactNo = contactNo;
+		this.email = email;
+	}
 
-    public UKVisaMessage(Serializable id, String summary, String description) {
-        this.id = id;
-        this.summary = summary;
-        this.description = description;
-    }
+	public Serializable getId() {
+		return id;
+	}
 
+	public void setId(Serializable id) {
+		this.id = id;
+	}
 
-    public String getSummary() {
-        return summary;
-    }
+	public String getFirstName() {
+		return firstName;
+	}
 
-    public void setSummary(String summary) {
-        this.summary = summary;
-    }
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public String getLastName() {
+		return lastName;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
 
-    public Serializable getId() {
-        return id;
-    }
+	public String getContactNo() {
+		return contactNo;
+	}
 
-    public void setId(Serializable id) {
-        this.id = id;
-    }
+	public void setContactNo(String contactNo) {
+		this.contactNo = contactNo;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
 }

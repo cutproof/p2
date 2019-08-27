@@ -11,6 +11,8 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.naming.NameNotFoundException;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import com.ilinksolutions.p2.data.UKVisaDAO;
 import com.ilinksolutions.p2.domains.UKVisaMessage;
 
@@ -31,7 +33,6 @@ public class UKVisaDAOImpl implements UKVisaDAO
 		 *  Schema should already be present.
 		 *  
 		 */
-		//	initializeSchemaIfNeeded();
 	}
 
 	private DataSource lookupDataSource()
@@ -58,51 +59,6 @@ public class UKVisaDAOImpl implements UKVisaDAO
 		}
 	}
 
-	private void initializeSchemaIfNeeded()
-	{
-		Statement statement = null;
-		Connection connection = null;
-		try
-		{
-			connection = getConnection();
-			if (!isSchemaInitialized(connection))
-			{
-				connection.setAutoCommit(true);
-				statement = connection.createStatement();
-				statement.executeUpdate("CREATE TABLE visadata (id bigint, summary VARCHAR(255), description TEXT)");
-			}
-		}
-		catch (SQLException e)
-		{
-			throw new RuntimeException(e);
-		}
-		finally
-		{
-			try
-			{
-				statement.close();
-				connection.close();
-			}
-			catch(Exception e)
-			{
-				throw new RuntimeException("UKVisaDAOImpl: initializeSchemaIfNeeded: Could not communicate with DB.");
-			}
-		}
-	}
-
-	private boolean isSchemaInitialized(Connection connection) throws SQLException
-	{
-		ResultSet rset = connection.getMetaData().getTables(null, null, "visadata", null);
-		try
-		{
-			return rset.next();
-		}
-		finally
-		{
-			rset.close();
-		}
-	}
-
 	@Override
 	public void save(UKVisaMessage entry)
 	{
@@ -112,10 +68,14 @@ public class UKVisaDAOImpl implements UKVisaDAO
 		{
 			connection = getConnection();
 			connection.setAutoCommit(true);
-			statement = connection.prepareStatement("INSERT INTO visadata (id, summary, description) VALUES (?, ?, ?)");
-			statement.setLong(1, getNextId());
-			statement.setString(2, entry.getSummary());
-			statement.setString(3, entry.getDescription());
+			//	statement = connection.prepareStatement("INSERT INTO visadata (id, summary, description) VALUES (?, ?, ?)");
+			statement = connection.prepareStatement("INSERT INTO public.visadata(person_id, first_name, last_name, contact_no, email) "
+					+ "VALUES (?, ?, ?, ?, ?)");
+			statement.setLong(1, this.getNextId());
+			statement.setString(2, entry.getFirstName());
+			statement.setString(3, entry.getLastName());
+			statement.setString(4, entry.getContactNo());
+			statement.setString(5, entry.getEmail());
 			statement.executeUpdate();
 		}
 		catch (SQLException e)
@@ -147,14 +107,16 @@ public class UKVisaDAOImpl implements UKVisaDAO
 		{
 			connection = getConnection();
 			statement = connection.createStatement();
-			rset = statement.executeQuery("SELECT id, summary, description FROM visadata");
+			rset = statement.executeQuery("SELECT person_id, first_name, last_name, contact_no, email FROM visadata");
 			list = new ArrayList<UKVisaMessage>();
 			while (rset.next())
 			{
 				Long id = rset.getLong(1);
-				String summary = rset.getString(2);
-				String description = rset.getString(3);
-				list.add(new UKVisaMessage(id, summary, description));
+				String firstName = rset.getString(2);
+				String lastName = rset.getString(3);
+				String contactNo = rset.getString(4);
+				String email = rset.getString(5);
+				list.add(new UKVisaMessage(id, firstName, lastName, contactNo, email));
 			}
 		}
 		catch (SQLException e)
