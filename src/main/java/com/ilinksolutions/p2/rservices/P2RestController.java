@@ -47,11 +47,8 @@ public class P2RestController
     	logger.info("registerMessage: registerMessage: Begin.");
     	logger.info("registerMessage: registerMessage: Transform: " + message.toString());
     	UKVisaService service = new UKVisaService();
-    	
-    	int id = service.addEntry(message);
-    	UKVisaMessage returnValue = new UKVisaMessage();
-    	returnValue.setId(id);
-    	if (id == 0)
+    	UKVisaMessage returnValue = service.addEntry(message);
+    	if (returnValue == null)
     	{
     		logger.info("registerMessage: registerMessage: id: NULL.");
             return ResponseEntity.notFound().build();
@@ -64,7 +61,7 @@ public class P2RestController
         }
     }
     
-    @PutMapping("/updatemsg{id}")
+    @PutMapping("/updatemsg/{id}")
     public ResponseEntity<UKVisaMessage> update(@RequestBody UKVisaMessage message, @PathVariable int id)
     {
         UKVisaService service = new UKVisaService();

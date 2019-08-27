@@ -26,13 +26,18 @@ public class UKVisaDAOImpl implements UKVisaDAO
 	public UKVisaDAOImpl()
 	{
 		dataSource = lookupDataSource();
-		/**
-		 *  
-		 *  Schema should already be present.
-		 *  
-		 */
 	}
 
+	public Connection getConnection() throws SQLException
+	{
+		return getDataSource().getConnection();
+	}
+
+	private DataSource getDataSource()
+	{
+		return dataSource;
+	}
+	
 	private DataSource lookupDataSource()
 	{
 		Context initialContext = null;
@@ -46,7 +51,6 @@ public class UKVisaDAOImpl implements UKVisaDAO
 			}
 			catch (NameNotFoundException e)
 			{
-				// Tomcat places datasources inside java:comp/env
 				envContext = (Context) initialContext.lookup("java:comp/env");
 				return (DataSource) envContext.lookup(System.getenv("DB_JNDI"));
 			}
@@ -58,28 +62,28 @@ public class UKVisaDAOImpl implements UKVisaDAO
 	}
 
 	@Override
-	public int save(UKVisaMessage entry)
+	public UKVisaMessage save(UKVisaMessage message)
 	{
 		logger.info("UKVisaDAOImpl: save: Begin.");
 		Connection connection = null;
+		UKVisaMessage returnValue = null;
 		PreparedStatement statement = null;
-		int returnValue = 0;
+		String insertMessageSQL = "INSERT INTO public.visadata(person_id, first_name, last_name, contact_no, email) " + 
+									"VALUES (?, ?, ?, ?, ?) RETURNING person_id";
 		try
 		{
-			logger.info("UKVisaDAOImpl: save: " + entry.toString());
+			logger.info("UKVisaDAOImpl: save: " + message.toString());
 			connection = getConnection();
 			connection.setAutoCommit(true);
-			//	statement = connection.prepareStatement("INSERT INTO visadata (id, summary, description) VALUES (?, ?, ?)");
-			statement = connection.prepareStatement("INSERT INTO public.visadata(person_id, first_name, last_name, contact_no, email) "
-					+ "VALUES (?, ?, ?, ?, ?) RETURNING person_id");
-			statement.setInt(1, (int) entry.getId());
-			statement.setString(2, entry.getFirstName());
-			statement.setString(3, entry.getLastName());
-			statement.setString(4, entry.getContactNo());
-			statement.setString(5, entry.getEmail());			
+			statement = connection.prepareStatement(insertMessageSQL);
+			statement.setInt(1, (int) message.getId());
+			statement.setString(2, message.getFirstName());
+			statement.setString(3, message.getLastName());
+			statement.setString(4, message.getContactNo());
+			statement.setString(5, message.getEmail());			
 			ResultSet rs = statement.executeQuery();
 			rs.next();
-			returnValue = rs.getInt(1);
+			returnValue = new UKVisaDAOImpl().getEntry((int)rs.getInt(1));
 		}
 		catch (SQLException e)
 		{
@@ -146,16 +150,6 @@ public class UKVisaDAOImpl implements UKVisaDAO
 		return list;
 	}
 
-	public Connection getConnection() throws SQLException
-	{
-		return getDataSource().getConnection();
-	}
-
-	private DataSource getDataSource()
-	{
-		return dataSource;
-	}
-
 	@Override
 	public UKVisaMessage getEntry(int id)
 	{
@@ -164,10 +158,11 @@ public class UKVisaDAOImpl implements UKVisaDAO
 		PreparedStatement ps = null;
 		Connection connection = null;
 		UKVisaMessage returnValue= null;
+		String selectMessageSQL = "SELECT person_id, first_name, last_name, contact_no, email FROM visadata where person_id = ?";
 		try
 		{
 			connection = getConnection();
-			ps = connection.prepareStatement("SELECT person_id, first_name, last_name, contact_no, email FROM visadata where person_id = ?");
+			ps = connection.prepareStatement(selectMessageSQL);
 		    ps.setInt(1, id);
 		    rs = ps.executeQuery();
 		    returnValue = new UKVisaMessage();
@@ -209,21 +204,20 @@ public class UKVisaDAOImpl implements UKVisaDAO
 		PreparedStatement ps = null;
 		Connection connection = null;
 		UKVisaMessage returnValue= null;
+		String updateMessageSQL = "update visadata set first_name = ?, last_name = ?, contact_no = ?, email = ? WHERE id = ?";
+
 		try
 		{
 			connection = getConnection();
-			ps = connection.prepareStatement("SELECT person_id, first_name, last_name, contact_no, email FROM visadata where person_id = ?");
-		    ps.setInt(1, id);
+			connection.setAutoCommit(true);
+			ps = connection.prepareStatement(updateMessageSQL);
+		    ps.setString(1, message.getFirstName());
+		    ps.setString(2, message.getLastName());
+		    ps.setString(3, message.getContactNo());
+		    ps.setString(4, message.getEmail());
+		    ps.setInt(5, id);
 		    rs = ps.executeQuery();
-		    returnValue = new UKVisaMessage();
-			while (rs.next())
-			{
-			    returnValue.setId(rs.getInt(1));
-			    returnValue.setFirstName(rs.getString(2));
-			    returnValue.setLastName(rs.getString(3));
-			    returnValue.setContactNo(rs.getString(4));
-			    returnValue.setEmail(rs.getString(5));
-			}
+		    returnValue = new UKVisaDAOImpl().getEntry(id);
 		}
 		catch (SQLException e)
 		{

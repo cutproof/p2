@@ -8,13 +8,10 @@ import java.io.ByteArrayOutputStream;
 
 import javax.activation.DataSource;
 import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
 import javax.mail.util.ByteArrayDataSource;
 
 import org.springframework.mail.MailException;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
@@ -24,6 +21,18 @@ import org.slf4j.LoggerFactory;
 public class EmailManager
 {
 	Logger logger = LoggerFactory.getLogger(EmailManager.class);
+	private String text = null;
+	private String subject = null;
+	
+	public EmailManager()
+	{
+	}
+
+	public EmailManager(String subject, String text)
+	{
+		this.subject = subject;
+		this.text = text;
+	}
 	
 	public void send(String message)
 	{
@@ -39,7 +48,7 @@ public class EmailManager
 				logger.info("EmailManager: send: document: NOT NULL.");
 				final InputStream inputStream = new ByteArrayInputStream(document.toByteArray());
 				final DataSource attachment = new ByteArrayDataSource(inputStream, "application/octet-stream");
-				sendMimeMessageWithAttachments("subject", "anonymous@xyz-mail.com", "anonymous@xyz-mail.com", attachment);
+				sendMimeMessageWithAttachments(attachment);
 			}
 		}
 		catch (IOException | MailException | MessagingException e)
@@ -50,7 +59,7 @@ public class EmailManager
 		logger.info("EmailManager: send: End.");
 	}
 
-	private void sendMimeMessageWithAttachments(String subject, String from, String to, DataSource dataSource) throws MessagingException
+	private void sendMimeMessageWithAttachments(DataSource dataSource) throws MessagingException
 	{
 		logger.info("EmailManager: sendMimeMessageWithAttachments: Begin.");
 
@@ -69,11 +78,11 @@ public class EmailManager
 
 		MimeMessage message = javaMailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message, true);
-		helper.setSubject("Test");
+		helper.setSubject(subject);
 		helper.setFrom("sungsam752729@gmail.com");
 		helper.setTo("sungsam852729@gmail.com");
 		helper.setReplyTo("sungsam852729@gmail.com");
-		helper.setText("stub", false);
+		helper.setText(text, false);
 		helper.addAttachment("message.eft", dataSource);
 		javaMailSender.send(message);
 		logger.info("EmailManager: sendMimeMessageWithAttachments: Sent Email!");

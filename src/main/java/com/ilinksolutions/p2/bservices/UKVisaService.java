@@ -15,31 +15,46 @@ public class UKVisaService
 {
 	private UKVisaDAO dao = new UKVisaDAOImpl();
 
-	public int addEntry(UKVisaMessage entry)
-	{
-		String messageString = "{\"id\": " + entry.getId() + "," +
-								"\"firstName\": \"" + entry.getFirstName() + "\"," +
-								"\"lastName\": \"" + entry.getLastName() + "\"," +
-								"\"contactNo\": \"" + entry.getContactNo() + "\"," +
-								"\"email\": \"" + entry.getContactNo() + "\"}";
-		String encryptedString = AES256Manager.encryptMessage(messageString);
-		EmailManager eMail = new EmailManager();
-		eMail.send(encryptedString);
-		return dao.save(entry);
-	}
-
-	public List<UKVisaMessage> getAllEntries()
-	{
-		return dao.list();
-	}
-	
 	public UKVisaMessage getEntry(int id)
 	{
 		return dao.getEntry(id);
 	}
 	
+	public List<UKVisaMessage> getAllEntries()
+	{
+		return dao.list();
+	}
+	
+	public UKVisaMessage addEntry(UKVisaMessage message)
+	{
+		String text = "Dear applicant, \n\n Your application has been updated based on your a request filed on your behalf.";
+		String subject = "Re: UK VISA Application: Submission Added.";
+
+		UKVisaMessage returnValue = dao.save(message);
+		String messageString = "{\"id\": " + message.getId() + "," +
+								"\"firstName\": \"" + message.getFirstName() + "\"," +
+								"\"lastName\": \"" + message.getLastName() + "\"," +
+								"\"contactNo\": \"" + message.getContactNo() + "\"," +
+								"\"email\": \"" + message.getContactNo() + "\"}";
+		String encryptedString = AES256Manager.encryptMessage(messageString);
+		EmailManager eMail = new EmailManager(subject, text);
+		eMail.send(encryptedString);
+		return returnValue;
+	}
+
 	public UKVisaMessage updateEntry(int id, UKVisaMessage message)
 	{
+		String text = "Dear applicant, \n\n Your application has been updated based on your a request filed on your behalf.";
+		String subject = "Re: UK VISA Application: Submission Updated.";
+		
+		String messageString = "{\"id\": " + message.getId() + "," +
+				"\"firstName\": \"" + message.getFirstName() + "\"," +
+				"\"lastName\": \"" + message.getLastName() + "\"," +
+				"\"contactNo\": \"" + message.getContactNo() + "\"," +
+				"\"email\": \"" + message.getContactNo() + "\"}";
+		String encryptedString = AES256Manager.encryptMessage(messageString);
+		EmailManager eMail = new EmailManager(subject, text);
+		eMail.send(encryptedString);
 		return dao.updateEntry(id, message);
 	}
 }
