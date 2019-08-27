@@ -86,8 +86,8 @@ public class UKVisaDAOImpl implements UKVisaDAO
 		}
 		catch (SQLException e)
 		{
-			System.out.println("list: SQLException: e: " + e.getMessage());
 			e.printStackTrace();
+			System.out.println("list: SQLException: e: " + e.getMessage());
 			throw new RuntimeException(e);
 		}
 		finally
