@@ -7,7 +7,7 @@ import java.io.Serializable;
  */
 public class UKVisaMessage
 {
-    private Serializable id;
+    private int id;
     private String firstName;
     private String lastName;
     private String contactNo;
@@ -17,7 +17,7 @@ public class UKVisaMessage
     {
     }
 
-    public UKVisaMessage(Serializable id, String firstName, String lastName, String contactNo, String email)
+    public UKVisaMessage(int id, String firstName, String lastName, String contactNo, String email)
     {
 		super();
 		this.id = id;
@@ -31,7 +31,7 @@ public class UKVisaMessage
 		return id;
 	}
 
-	public void setId(Serializable id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
