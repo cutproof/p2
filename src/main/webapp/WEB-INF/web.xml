@@ -5,7 +5,7 @@
     <servlet>
         <display-name>MainServlet</display-name>
         <servlet-name>MainServlet</servlet-name>
-        <servlet-class>com.ilinksolutions.poc.ilinkp2.wservices.MainServlet</servlet-class>
+        <servlet-class>com.ilinksolutions.p2.MainServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
