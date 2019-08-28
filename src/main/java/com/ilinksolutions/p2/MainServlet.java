@@ -22,9 +22,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
 
-/**
- *
- */
 public class MainServlet extends HttpServlet
 {
 	String message = null;
@@ -69,60 +66,4 @@ public class MainServlet extends HttpServlet
 			reader.close();
 		}
 	}
-
-	@Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
-    {
-		response.setContentType("text/html");
-		response.setCharacterEncoding("UTF-8");
-    	try
-    	{
-    		logger.info("MainServlet: doPost: Begin.");
-            boolean isMultipart = ServletFileUpload.isMultipartContent(request);
-            if(isMultipart)
-            {
-                ServletFileUpload upload = new ServletFileUpload();
-                FileItemIterator iter = upload.getItemIterator(request);
-                while (iter.hasNext())
-                {
-                    FileItemStream item = iter.next();
-                    String name = item.getFieldName();
-                    InputStream stream = item.openStream();
-                    logger.info("File field " + name + " with file name " + item.getName() + " detected.");
-                    String unmarshalledString = convert(stream, Charset.defaultCharset());
-                    message = AES256Manager.decryptMessage(unmarshalledString);
-                    logger.info("AES256Manager: message decrypted: " + message);
-                    request.setAttribute("message", message);
-                    response.setHeader("message", String.valueOf(message));
-                }                   	
-            }
-            else
-            {
-            	logger.info("Not multipart request.");
-            }
-        } 
-        catch (FileUploadException ex)
-        {
-            logger.info("Upload: doPost: Exception: " + ex.getMessage());
-            ex.printStackTrace();
-        }
-    	RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
-    	dispatcher.forward(request, response);
-    }
-    
-    public String convert(InputStream inputStream, Charset charset) throws IOException
-    {	 
-    	StringBuilder stringBuilder = new StringBuilder();
-    	String line = null;
-    	
-    	try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, charset)))
-    	{	
-    		while ((line = bufferedReader.readLine()) != null)
-    		{
-    			stringBuilder.append(line);
-    		}
-    	}
-    	logger.info("MainServlet: doPost: End.");
-    	return stringBuilder.toString();
-    }
 }
