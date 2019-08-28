@@ -208,7 +208,7 @@ public class UKVisaDAOImpl implements UKVisaDAO
 		PreparedStatement ps = null;
 		Connection connection = null;
 		UKVisaMessage returnValue= null;
-		String updateMessageSQL = "update visadata set first_name = ?, last_name = ?, contact_no = ?, email = ? WHERE id = ?";
+		String updateMessageSQL = "update visadata set first_name = ?, last_name = ?, contact_no = ?, email = ? WHERE person_id = ?";
 
 		try
 		{
