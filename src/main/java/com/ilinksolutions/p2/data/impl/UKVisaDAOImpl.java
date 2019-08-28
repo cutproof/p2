@@ -220,7 +220,7 @@ public class UKVisaDAOImpl implements UKVisaDAO
 		    ps.setString(3, message.getContactNo());
 		    ps.setString(4, message.getEmail());
 		    ps.setInt(5, id);
-		    ps.executeQuery();
+		    ps.executeUpdate();
 		    logger.info("UKVisaDAOImpl: updateEntry: Update Query Executed.");
 		    returnValue = new UKVisaDAOImpl().getEntry(id);
 		    logger.info("UKVisaDAOImpl: updateEntry: returnValue: " + returnValue.toString());
