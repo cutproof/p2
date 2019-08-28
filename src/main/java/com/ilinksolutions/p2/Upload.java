@@ -69,7 +69,7 @@ public class Upload extends HttpServlet
             logger.info("Upload: doPost: Exception: " + ex.getMessage());
             ex.printStackTrace();
         }
-    	RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
+    	RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
     	dispatcher.forward(request, response);
     }
     
