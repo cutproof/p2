@@ -36,9 +36,13 @@
 					<div class="panel-body">{{ description }}</div>
 				</div>
 				<!-- end repeat for each entry -->
-				<form action="go" method="post" enctype="multipart/form-data">
-					Select File:<input type="file" name="fname" /><br /> <input
-						type="submit" value="upload" />
+				<form action="MainServlet" method="post" enctype="multipart/form-data">
+					Select File:
+					<br/>
+					<input type="file" name="fname" />
+					<br/>
+					<br/>
+					<input type="submit" value="upload" />
 				</form>
 				<h2>${message}</h2>
 			</div>
