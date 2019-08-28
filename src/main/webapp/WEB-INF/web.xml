@@ -9,20 +9,9 @@
 		<servlet-class>com.ilinksolutions.p2.MainServlet</servlet-class>
 	</servlet>
 
-	<servlet>
-		<display-name>Upload</display-name>
-		<servlet-name>Upload</servlet-name>
-		<servlet-class>com.ilinksolutions.p2.Upload</servlet-class>
-	</servlet>
-
 	<servlet-mapping>
 		<servlet-name>MainServlet</servlet-name>
 		<url-pattern>/index.html</url-pattern>
-	</servlet-mapping>
-
-	<servlet-mapping>
-		<servlet-name>Upload</servlet-name>
-		<url-pattern>/decrypt.html</url-pattern>
 	</servlet-mapping>
 
 	<welcome-file-list>
