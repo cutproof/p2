@@ -16,29 +16,33 @@
 -->
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <link type="text/css" rel="stylesheet" media="screen" href="../resources/css/bootstrap.min.css"/>
-    <link type="text/css" rel="stylesheet" media="screen" href="../resources/css/bootstrap-theme.min.css"/>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link type="text/css" rel="stylesheet" media="screen"
+	href="../resources/css/bootstrap.min.css" />
+<link type="text/css" rel="stylesheet" media="screen"
+	href="../resources/css/bootstrap-theme.min.css" />
 </head>
 <body>
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-sm-6 col-sm-offset-3">
-            <h1>iLink Solutions: Phase Two Demo.</h1>
-            <!-- begin repeat for each entry -->
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">{{ summary }}</h3>
-                </div>
-                <div class="panel-body">
-                    {{ description }}
-                </div>
-            </div>
-            <!-- end repeat for each entry -->
-        </div>
-    </div>
-</div>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-6 col-sm-offset-3">
+				<h1>iLink Solutions: Phase Two Demo.</h1>
+				<!-- begin repeat for each entry -->
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">{{ summary }}</h3>
+					</div>
+					<div class="panel-body">{{ description }}</div>
+				</div>
+				<!-- end repeat for each entry -->
+				<form action="go" method="post" enctype="multipart/form-data">
+					Select File:<input type="file" name="fname" /><br /> <input
+						type="submit" value="upload" />
+				</form>
+			</div>
+		</div>
+	</div>
 
 </body>
 </html>
