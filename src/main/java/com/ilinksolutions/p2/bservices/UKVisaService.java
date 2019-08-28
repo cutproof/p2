@@ -27,7 +27,8 @@ public class UKVisaService
 	
 	public UKVisaMessage addEntry(UKVisaMessage message)
 	{
-		String text = "Dear applicant, \n\n Your application has been submitted based on your a request filed on your behalf.";
+		String text = "Dear " + message.getFirstName() + " " + message.getLastName() + 
+				", \n\n Your application has been submitted based on your a request filed on your behalf.";
 		String subject = "Re: UK VISA Application: Submission Added.";
 
 		UKVisaMessage returnValue = dao.save(message);
@@ -44,7 +45,8 @@ public class UKVisaService
 
 	public UKVisaMessage updateEntry(int id, UKVisaMessage message)
 	{
-		String text = "Dear applicant, \n\n Your application has been updated based on your a request filed on your behalf.";
+		String text = "Dear " + message.getFirstName() + " " + message.getLastName() + 
+				", \n\n Your application has been updated based on your a request filed on your behalf.";
 		String subject = "Re: UK VISA Application: Submission Updated.";
 		
 		String messageString = "{\"id\": " + message.getId() + "," +
