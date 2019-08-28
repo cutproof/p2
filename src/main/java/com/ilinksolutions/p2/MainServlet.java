@@ -1,5 +1,6 @@
 package com.ilinksolutions.p2;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -74,13 +75,6 @@ public class MainServlet extends HttpServlet
     {
 		response.setContentType("text/html");
 		response.setCharacterEncoding("UTF-8");
-		PrintWriter writer = response.getWriter();
-		writer.append("<!DOCTYPE html>\r\n")
-			  .append("<html>\r\n")
-			  .append("		<head>\r\n")
-			  .append("			<title>iLink Solutions: Phase Two Demo</title>\r\n")
-			  .append("		</head>\r\n")
-			  .append("		<body>\r\n");		
     	try
     	{
     		logger.info("MainServlet: doPost: Begin.");
@@ -98,12 +92,12 @@ public class MainServlet extends HttpServlet
                     String unmarshalledString = convert(stream, Charset.defaultCharset());
                     message = AES256Manager.decryptMessage(unmarshalledString);
                     logger.info("AES256Manager: message decrypted: " + message);
+                    request.setAttribute("message", message);
+                    response.setHeader("message", String.valueOf(message));
                 }                   	
-                writer.append("Decrypted message: " + message);
             }
             else
             {
-            	writer.append("No File.");
             	logger.info("Not multipart request.");
             }
         } 
@@ -112,8 +106,8 @@ public class MainServlet extends HttpServlet
             logger.info("Upload: doPost: Exception: " + ex.getMessage());
             ex.printStackTrace();
         }
-		writer.append("		</body>\r\n")
-		.append("</html>\r\n");
+    	RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
+    	dispatcher.forward(request, response);
     }
     
     public String convert(InputStream inputStream, Charset charset) throws IOException
