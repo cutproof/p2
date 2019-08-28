@@ -204,7 +204,6 @@ public class UKVisaDAOImpl implements UKVisaDAO
 	public UKVisaMessage updateEntry(int id, UKVisaMessage message)
 	{
 		logger.info("UKVisaDAOImpl: updateEntry: Begin: " + id);
-		ResultSet rs = null;
 		PreparedStatement ps = null;
 		Connection connection = null;
 		UKVisaMessage returnValue= null;
@@ -221,7 +220,6 @@ public class UKVisaDAOImpl implements UKVisaDAO
 		    ps.setString(4, message.getEmail());
 		    ps.setInt(5, id);
 		    ps.executeUpdate();
-		    logger.info("UKVisaDAOImpl: updateEntry: Update Query Executed.");
 		    returnValue = new UKVisaDAOImpl().getEntry(id);
 		    logger.info("UKVisaDAOImpl: updateEntry: returnValue: " + returnValue.toString());
 		}
@@ -235,7 +233,6 @@ public class UKVisaDAOImpl implements UKVisaDAO
 		{
 			try
 			{
-				rs.close();
 				ps.close();
 				connection.close();
 			}
