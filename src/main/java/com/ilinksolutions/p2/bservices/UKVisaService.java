@@ -36,7 +36,7 @@ public class UKVisaService
 								"\"firstName\": \"" + message.getFirstName() + "\"," +
 								"\"lastName\": \"" + message.getLastName() + "\"," +
 								"\"contactNo\": \"" + message.getContactNo() + "\"," +
-								"\"email\": \"" + message.getContactNo() + "\"}";
+								"\"email\": \"" + message.getEmail() + "\"}";
 		String encryptedString = AES256Manager.encryptMessage(messageString);
 		EmailManager eMail = new EmailManager(subject, text);
 		eMail.send(encryptedString);
@@ -53,7 +53,7 @@ public class UKVisaService
 				"\"firstName\": \"" + message.getFirstName() + "\"," +
 				"\"lastName\": \"" + message.getLastName() + "\"," +
 				"\"contactNo\": \"" + message.getContactNo() + "\"," +
-				"\"email\": \"" + message.getContactNo() + "\"}";
+				"\"email\": \"" + message.getEmail() + "\"}";
 		String encryptedString = AES256Manager.encryptMessage(messageString);
 		EmailManager eMail = new EmailManager(subject, text);
 		eMail.send(encryptedString);
