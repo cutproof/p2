@@ -10,8 +10,9 @@
 	</servlet>
 
 	<servlet>
-		<servlet-name>UploadServlet</servlet-name>
-		<servlet-class>UploadServlet</servlet-class>
+		<display-name>Upload</display-name>
+		<servlet-name>Upload</servlet-name>
+		<servlet-class>com.ilinksolutions.p2.Upload</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
@@ -20,7 +21,7 @@
 	</servlet-mapping>
 
 	<servlet-mapping>
-		<servlet-name>UploadServlet</servlet-name>
+		<servlet-name>Upload</servlet-name>
 		<url-pattern>/decrypt.html</url-pattern>
 	</servlet-mapping>
 
