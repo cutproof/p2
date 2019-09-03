@@ -25,7 +25,7 @@ public class P2RestController
     @GetMapping("/getmsg/{id}")
     public ResponseEntity<UKVisaMessage> readEntry(@PathVariable String id)
     {
-    	logger.info("P2RestController: readEntry: Begin.");
+    	logger.info("P2RestController: readEntry: Begin!");
     	logger.info("P2RestController: readEntry: Path Variable: " + id);
         UKVisaService service = new UKVisaService();
         UKVisaMessage returnValue = service.getEntry(new Integer(id).intValue());
