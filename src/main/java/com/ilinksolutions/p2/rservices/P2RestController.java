@@ -23,7 +23,7 @@ public class P2RestController
 	Logger logger = LoggerFactory.getLogger(P2RestController.class);
 	
     @GetMapping("/getmsg/{id}")
-    public ResponseEntity<UKVisaMessage> readEntry(@PathVariable String id)
+	public ResponseEntity<UKVisaMessage> readEntry(@PathVariable String id)
     {
     	logger.info("P2RestController: readEntry: Begin!");
     	logger.info("P2RestController: readEntry: Path Variable: " + id);
