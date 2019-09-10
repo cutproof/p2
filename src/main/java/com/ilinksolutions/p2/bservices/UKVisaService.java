@@ -47,7 +47,7 @@ public class UKVisaService
 	{
 		String text = "Dear " + message.getFirstName() + " " + message.getLastName() + 
 				", \n\n Your application has been updated based on your a request filed on your behalf.";
-		String subject = "Re: UK VISA Application: Submission Updated.";
+		String subject = "Re: UK VISA Application: Submission Updated!";
 		
 		String messageString = "{\"id\": " + message.getId() + "," +
 				"\"firstName\": \"" + message.getFirstName() + "\"," +
